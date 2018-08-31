@@ -261,7 +261,9 @@ module Sensu
         @transport.on_error do |error|
           @logger.error("transport connection error", :error => error.to_s)
           if @settings[:transport][:reconnect_on_error]
-            @transport.reconnect
+             if @settings[:transport][:time_to_reconnect]
+                sleep(:time_to_reconnect)
+             @transport.reconnect
           else
             stop
           end
